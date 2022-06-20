@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1818454181",
+    "firebase_url": "https://bullyiflutter-default-rtdb.firebaseio.com",
+    "project_id": "bullyiflutter",
+    "storage_bucket": "bullyiflutter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1818454181:android:bb9c60c7b4b13504af054c",
+        "android_client_info": {
+          "package_name": "com.example.bully_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1818454181-1niejur98gu5evrou7qpqp2ivfdi5t9o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA23ahUp1DLgJv0udXFXEU4Axl8I3Eu7No"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1818454181-1niejur98gu5evrou7qpqp2ivfdi5t9o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
