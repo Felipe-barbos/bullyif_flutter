@@ -127,7 +127,10 @@ class _ListaDenunciaState extends State<ListaDenuncia> {
                     child: Column(
                       children: [
                         Text("Carregando Denuncias"),
-                        CircularProgressIndicator()
+                        CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 5.0,
+                        )
                       ],
                     ),
                   );
@@ -152,7 +155,10 @@ class _ListaDenunciaState extends State<ListaDenuncia> {
                                       boxShadow: kElevationToShadow[2],
                                     ),
                                     child: ListTile(
-                                      onTap: () {},
+                                      onTap: () {
+                                        Navigator.pushNamed(context, "/denunciaEfetuada",
+                                        arguments: denuncia);
+                                      },
                                       iconColor: Colors.white,
                                       leading: Container(
                                         child: CircleAvatar(

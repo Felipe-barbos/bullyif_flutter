@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class BatePapo extends StatefulWidget {
+  //Instânciando o objeto que irá receber o orguments do navigator
   Usuario contato;
   BatePapo(this.contato);
 

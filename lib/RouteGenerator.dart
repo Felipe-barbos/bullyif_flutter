@@ -1,5 +1,6 @@
 import 'package:bully_flutter/BatePapo.dart';
 import 'package:bully_flutter/Cadastro.dart';
+import 'package:bully_flutter/DenunciaEfetuada.dart';
 import 'package:bully_flutter/EfetuarDenuncia.dart';
 import 'package:bully_flutter/Home.dart';
 import 'package:bully_flutter/ListaDenuncia.dart';
@@ -33,6 +34,8 @@ static  var args;
       return MaterialPageRoute(builder: (_) => ListaDenuncia());
       case "/efetuarDenuncia":
       return MaterialPageRoute(builder: (_) => EfetuarDenuncia());
+      case "/denunciaEfetuada":
+      return MaterialPageRoute(builder: (_) => DenunciaEfetuada(args!));
       default:
       _erroRota();
     }
