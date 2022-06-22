@@ -18,6 +18,11 @@ class EfetuarDenuncia extends StatefulWidget {
 }
 
 class _EfetuarDenunciaState extends State<EfetuarDenuncia> {
+  //instanciando minha variável que receberá o date time para ser usada no Date picker.
+  DateTime date = DateTime(2022,06,22);
+
+  //INSTANCIANDO A VARIÁVEIS QUE SALVARÁ A DATA DO MEU DATE
+  var _dataOcorrido;
 
   //Variáveis com identificação do usuário
   var _idUsuarioLogado;
@@ -25,7 +30,6 @@ class _EfetuarDenunciaState extends State<EfetuarDenuncia> {
   var _urlImage;
   var _nomeUsuario;
   var _matricula;
-  
 
   //CONTROLADORES
   TextEditingController _controllerIdentiVitima = TextEditingController();
@@ -36,141 +40,117 @@ class _EfetuarDenunciaState extends State<EfetuarDenuncia> {
   TextEditingController _controllerTipoAgressao = TextEditingController();
   TextEditingController _controllerDescricao = TextEditingController();
 
-_validarCamposDenuncia(){
-  // RECUPERAR DADOS DOS CAMPOS PREENCHIDOS NA TELA CADASTRO
-  var identificadorVitima = _controllerIdentiVitima.text;
-  var identificadorAgressor = _controllerIdentiAgressor.text;
-  var localOcorrido = _controllerLocalOcorrido.text;
-  var dataOcorrido = _controllerDataOcorrido.text;
-  var horario = _controllerHorario.text;
-  var tipoAgressao = _controllerTipoAgressao.text;
-  var descricao = _controllerDescricao.text;
+  _validarCamposDenuncia() {
+    // RECUPERAR DADOS DOS CAMPOS PREENCHIDOS NA TELA CADASTRO
+    var identificadorVitima = _controllerIdentiVitima.text;
+    var identificadorAgressor = _controllerIdentiAgressor.text;
+    var localOcorrido = _controllerLocalOcorrido.text;
+    //var dataOcorrido = _controllerDataOcorrido.text;
+    var horario = _controllerHorario.text;
+    var tipoAgressao = _controllerTipoAgressao.text;
+    var descricao = _controllerDescricao.text;
 
-  if(identificadorVitima.isNotEmpty ){
-    if(identificadorAgressor.isNotEmpty){
-      if(tipoAgressao.isNotEmpty){
+    if (identificadorVitima.isNotEmpty) {
+      if (identificadorAgressor.isNotEmpty) {
+        if (tipoAgressao.isNotEmpty) {
           int id;
-        //INSTANCIANDO AS INFORMAÇÕES NO OBJETO DENUNCIA
-         Denuncia denuncia = Denuncia();
-         //criando uma ID para denuncia
-         Random random = new Random();
-         int idenuncia = random.nextInt(9999);
-         denuncia.idDenuncia = idenuncia.toString();
-         denuncia.identificacaoUsuario = _idUsuarioLogado;
-         denuncia.identificacaoVitima = identificadorVitima;
-         denuncia.identificacaoAgressor = identificadorAgressor;
-         denuncia.statusDenuncia = "Não Resolvido";
-         denuncia.localOcorrido = localOcorrido;
-         denuncia.dataOcorrido = dataOcorrido;
-         denuncia.horarioOcorrido = horario;
-         denuncia.tipAgressao = tipoAgressao;
-         denuncia.descricao = descricao;
+          //INSTANCIANDO AS INFORMAÇÕES NO OBJETO DENUNCIA
+          Denuncia denuncia = Denuncia();
+          //criando uma ID para denuncia
+          Random random = new Random();
+          int idenuncia = random.nextInt(9999);
+          denuncia.idDenuncia = idenuncia.toString();
+          denuncia.identificacaoUsuario = _idUsuarioLogado;
+          denuncia.identificacaoVitima = identificadorVitima;
+          denuncia.identificacaoAgressor = identificadorAgressor;
+          denuncia.statusDenuncia = "Não Resolvido";
+          denuncia.localOcorrido = localOcorrido;
+          denuncia.dataOcorrido = _dataOcorrido;
+          denuncia.horarioOcorrido = horario;
+          denuncia.tipAgressao = tipoAgressao;
+          denuncia.descricao = descricao;
 
-         Fluttertoast.showToast(
-      msg: _matricula,
-      toastLength: Toast.LENGTH_LONG,
-      fontSize: 16,
-      backgroundColor: Colors.grey,
-      textColor: Colors.white
-      );
+          Fluttertoast.showToast(
+              msg: _matricula,
+              toastLength: Toast.LENGTH_LONG,
+              fontSize: 16,
+              backgroundColor: Colors.grey,
+              textColor: Colors.white);
 
-         
-
-         _cadastrarDenuncia(denuncia);
-      }
-      else{
+          _cadastrarDenuncia(denuncia);
+        } else {
+          Fluttertoast.showToast(
+              msg: "Tipo de Agressão não mencionado!",
+              toastLength: Toast.LENGTH_LONG,
+              fontSize: 16,
+              backgroundColor: Colors.grey,
+              textColor: Colors.white);
+        }
+      } else {
         Fluttertoast.showToast(
-      msg: "Tipo de Agressão não mencionado!",
-      toastLength: Toast.LENGTH_LONG,
-      fontSize: 16,
-      backgroundColor: Colors.grey,
-      textColor: Colors.white
-      );
+            msg: "Identificação do Agressor não definida",
+            toastLength: Toast.LENGTH_LONG,
+            fontSize: 16,
+            backgroundColor: Colors.grey,
+            textColor: Colors.white);
       }
-
-    }
-    else{
+    } else {
       Fluttertoast.showToast(
-      msg: "Identificação do Agressor não definida",
-      toastLength: Toast.LENGTH_LONG,
-      fontSize: 16,
-      backgroundColor: Colors.grey,
-      textColor: Colors.white
-      );
+          msg: "Identificação da Vítima não definida",
+          toastLength: Toast.LENGTH_LONG,
+          fontSize: 16,
+          backgroundColor: Colors.grey,
+          textColor: Colors.white);
     }
-  }else{
-    Fluttertoast.showToast(
-      msg: "Identificação da Vítima não definida",
-      toastLength: Toast.LENGTH_LONG,
-      fontSize: 16,
-      backgroundColor: Colors.grey,
-      textColor: Colors.white
-      );
   }
-  
 
-}
-_cadastrarDenuncia (Denuncia denuncia){
+  _cadastrarDenuncia(Denuncia denuncia) {
+    // SALVAR DADOS DA DENUNCIA NO BANCO DE DADOS
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    db.collection("denuncias").doc(denuncia.idDenuncia).set(denuncia.toMap());
 
-  // SALVAR DADOS DA DENUNCIA NO BANCO DE DADOS
-  FirebaseFirestore db = FirebaseFirestore.instance;
-  db.collection("denuncias")
-  .doc(denuncia.idDenuncia)
-  .set(denuncia.toMap());
-  
- 
-
-  /*
+    /*
   +denuncias
     +IdUsuario que efetuou a denuncia
       + Id da denuncia efetuada
         + informações da denuncia
 
   */
-  Fluttertoast.showToast(
-      msg: "Denúncia Enviada com Sucesso!",
-      toastLength: Toast.LENGTH_LONG,
-      fontSize: 16,
-      backgroundColor: Colors.grey,
-      textColor: Colors.white
-      );
-  
+    Fluttertoast.showToast(
+        msg: "Denúncia Enviada com Sucesso!",
+        toastLength: Toast.LENGTH_LONG,
+        fontSize: 16,
+        backgroundColor: Colors.grey,
+        textColor: Colors.white);
+  }
 
-}
-_recuperarDadosUsuario() async {
-
+  _recuperarDadosUsuario() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? usuarioLogado = await auth.currentUser;
-    
+
     setState(() {
       _idUsuarioLogado = usuarioLogado?.uid;
-    _emailUsuarioLogado = usuarioLogado?.email;
+      _emailUsuarioLogado = usuarioLogado?.email;
     });
-    
 
-     //Recuperando dados do usuário logado no firebase
-        FirebaseFirestore db = FirebaseFirestore.instance;
-        DocumentSnapshot snapshot = await db.collection("usuarios").doc(_idUsuarioLogado).get();
-        dynamic dadosUsuario = snapshot.data();
+    //Recuperando dados do usuário logado no firebase
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    DocumentSnapshot snapshot =
+        await db.collection("usuarios").doc(_idUsuarioLogado).get();
+    dynamic dadosUsuario = snapshot.data();
 
+    setState(() {
+      if (dadosUsuario["urlImagem"] != null) {
         setState(() {
-          
-           if(dadosUsuario["urlImagem"] != null ){
-            setState(() {
-              _urlImage = dadosUsuario["urlImagem"];
-            });
-           }
-           else{
-            _urlImage = 
-            "https://firebasestorage.googleapis.com/v0/b/bullyiflutter.appspot.com/o/perfil%2Fusuario.png?alt=media&token=11f37352-1b46-4031-9b5d-7ab8286081c4";
-           }
-           _nomeUsuario = dadosUsuario["nome"];
-           _matricula = dadosUsuario ["matricula"];
+          _urlImage = dadosUsuario["urlImagem"];
         });
-
-        
-
-
+      } else {
+        _urlImage =
+            "https://firebasestorage.googleapis.com/v0/b/bullyiflutter.appspot.com/o/perfil%2Fusuario.png?alt=media&token=11f37352-1b46-4031-9b5d-7ab8286081c4";
+      }
+      _nomeUsuario = dadosUsuario["nome"];
+      _matricula = dadosUsuario["matricula"];
+    });
   }
 
   @override
@@ -247,10 +227,9 @@ _recuperarDadosUsuario() async {
                             Text(
                               "Identificação da Vítima:",
                               style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black54
-                              ),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black54),
                             ),
                             Container(
                               width: 320,
@@ -279,10 +258,9 @@ _recuperarDadosUsuario() async {
                             Text(
                               "Identificação do Agressor:",
                               style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black54
-                              ),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black54),
                             ),
                             Container(
                               width: 320,
@@ -311,10 +289,9 @@ _recuperarDadosUsuario() async {
                             Text(
                               "Local do Ocorrido:",
                               style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black54
-                              ),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black54),
                             ),
                             Container(
                               width: 320,
@@ -345,28 +322,49 @@ _recuperarDadosUsuario() async {
                                 Text(
                                   "Data do Ocorrido:",
                                   style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black54
-                                  ),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black54),
                                 ),
                                 Container(
                                     width: 140,
                                     height: 70,
                                     child: TextField(
-                                      controller: _controllerDataOcorrido,
+                                      readOnly: true,
                                       keyboardType: TextInputType.datetime,
                                       style: TextStyle(fontSize: 16),
                                       decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.fromLTRB(
-                                              13, 14, 13, 14),
-                                          hintText: "Data do Ocorrido:",
-                                          filled: true,
-                                          fillColor: Colors.white,
-                                          border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                              borderSide: BorderSide.none)),
+                                        contentPadding:
+                                            EdgeInsets.fromLTRB(13, 14, 13, 14),
+                                        //INSTANCIANDO MEU DATE NO HINTTEXT
+                                        hintText:
+                                            "${date.day}/${date.month}/${date.year}",
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                        border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            borderSide: BorderSide.none),
+                                      ),
+                                      onTap: () async {
+                                        DateTime? newDate =
+                                            await showDatePicker(
+                                                context: context,
+                                                initialDate: date,
+                                                firstDate: DateTime(1900),
+                                                lastDate: DateTime(2100),
+                                                );
+
+                                        //if caso seja cancelado o new date recebe null
+                                        if (newDate == null) return;
+                                       
+                                        //if caso a data seja selecionada e o usuário clique no ok, as informações será armazenada na variável dataOcorrido
+                                        setState(() {
+                                          date = newDate;
+
+                                          _dataOcorrido = '${date.day}/ ${date.month} / ${date.year}';
+                                        });
+                                      },
                                     ))
                               ],
                             )),
@@ -377,10 +375,9 @@ _recuperarDadosUsuario() async {
                                 Text(
                                   "Horário:",
                                   style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black54
-                                  ),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black54),
                                 ),
                                 Container(
                                     width: 140,
@@ -411,10 +408,9 @@ _recuperarDadosUsuario() async {
                             Text(
                               " Tipo de Agressão:",
                               style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black54
-                              ),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black54),
                             ),
                             Container(
                               width: 320,
@@ -443,10 +439,9 @@ _recuperarDadosUsuario() async {
                             Text(
                               "Descrição:",
                               style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black54
-                              ),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black54),
                             ),
                             Container(
                               width: 320,
@@ -465,9 +460,9 @@ _recuperarDadosUsuario() async {
                                     filled: true,
                                     fillColor: Colors.white,
                                     border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                        borderSide: BorderSide.none,
-                                        )),
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: BorderSide.none,
+                                    )),
                               ),
                             ),
                           ],
