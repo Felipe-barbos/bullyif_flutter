@@ -19,6 +19,7 @@ FirebaseFirestore bd = FirebaseFirestore.instance;
     home: Login(),
     theme: ThemeData(  
       primaryColor: Color(0xff9ecfc0),
+      colorScheme: ColorScheme.light(primary: const Color(0xff9ecfc0)),
       accentColor: Color(0xff4fa167)
     ),
 

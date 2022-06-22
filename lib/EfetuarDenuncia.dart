@@ -19,10 +19,13 @@ class EfetuarDenuncia extends StatefulWidget {
 
 class _EfetuarDenunciaState extends State<EfetuarDenuncia> {
   //instanciando minha variável que receberá o date time para ser usada no Date picker.
-  DateTime date = DateTime(2022,06,22);
+  DateTime date = DateTime(2022, 06, 22);
+  //instanciando minha variável que receberá o  time para ser usada no time picker.
+  TimeOfDay time = TimeOfDay(hour: 10, minute: 30);
 
   //INSTANCIANDO A VARIÁVEIS QUE SALVARÁ A DATA DO MEU DATE
   var _dataOcorrido;
+  var _horarioOcorrido;
 
   //Variáveis com identificação do usuário
   var _idUsuarioLogado;
@@ -35,8 +38,6 @@ class _EfetuarDenunciaState extends State<EfetuarDenuncia> {
   TextEditingController _controllerIdentiVitima = TextEditingController();
   TextEditingController _controllerIdentiAgressor = TextEditingController();
   TextEditingController _controllerLocalOcorrido = TextEditingController();
-  TextEditingController _controllerDataOcorrido = TextEditingController();
-  TextEditingController _controllerHorario = TextEditingController();
   TextEditingController _controllerTipoAgressao = TextEditingController();
   TextEditingController _controllerDescricao = TextEditingController();
 
@@ -45,8 +46,7 @@ class _EfetuarDenunciaState extends State<EfetuarDenuncia> {
     var identificadorVitima = _controllerIdentiVitima.text;
     var identificadorAgressor = _controllerIdentiAgressor.text;
     var localOcorrido = _controllerLocalOcorrido.text;
-    //var dataOcorrido = _controllerDataOcorrido.text;
-    var horario = _controllerHorario.text;
+    var horario = _horarioOcorrido;
     var tipoAgressao = _controllerTipoAgressao.text;
     var descricao = _controllerDescricao.text;
 
@@ -339,6 +339,9 @@ class _EfetuarDenunciaState extends State<EfetuarDenuncia> {
                                         //INSTANCIANDO MEU DATE NO HINTTEXT
                                         hintText:
                                             "${date.day}/${date.month}/${date.year}",
+                                        hintStyle: TextStyle(
+                                          color: Color(0xff9ecfc0),
+                                        ),
                                         filled: true,
                                         fillColor: Colors.white,
                                         border: OutlineInputBorder(
@@ -349,20 +352,21 @@ class _EfetuarDenunciaState extends State<EfetuarDenuncia> {
                                       onTap: () async {
                                         DateTime? newDate =
                                             await showDatePicker(
-                                                context: context,
-                                                initialDate: date,
-                                                firstDate: DateTime(1900),
-                                                lastDate: DateTime(2100),
-                                                );
+                                          context: context,
+                                          initialDate: date,
+                                          firstDate: DateTime(1900),
+                                          lastDate: DateTime(2100),
+                                        );
 
                                         //if caso seja cancelado o new date recebe null
                                         if (newDate == null) return;
-                                       
+
                                         //if caso a data seja selecionada e o usuário clique no ok, as informações será armazenada na variável dataOcorrido
                                         setState(() {
                                           date = newDate;
 
-                                          _dataOcorrido = '${date.day}/ ${date.month} / ${date.year}';
+                                          _dataOcorrido =
+                                              '${date.day}/ ${date.month} / ${date.year}';
                                         });
                                       },
                                     ))
@@ -383,13 +387,33 @@ class _EfetuarDenunciaState extends State<EfetuarDenuncia> {
                                     width: 140,
                                     height: 70,
                                     child: TextField(
-                                      controller: _controllerHorario,
                                       keyboardType: TextInputType.text,
+                                      readOnly: true,
+                                      onTap: () async {
+                                        TimeOfDay? newTime =
+                                            await showTimePicker(
+                                          context: context,
+                                          initialTime: time,
+                                        );
+
+                                        //caso seja cancelado o newTime recebe null
+                                        if (newTime == null) return;
+
+                                        setState(() {
+                                          time = newTime;
+                                          _horarioOcorrido =
+                                              "${time.hour}: ${time.minute}";
+                                        });
+                                      },
                                       style: TextStyle(fontSize: 16),
                                       decoration: InputDecoration(
                                           contentPadding: EdgeInsets.fromLTRB(
                                               13, 14, 13, 14),
-                                          hintText: "Horário:",
+                                          hintText:
+                                              "${time.hour}:${time.minute}",
+                                          hintStyle: TextStyle(
+                                            color: Color(0xff9ecfc0),
+                                          ),
                                           filled: true,
                                           fillColor: Colors.white,
                                           border: OutlineInputBorder(
