@@ -23,6 +23,17 @@ class _EfetuarDenunciaState extends State<EfetuarDenuncia> {
   //instanciando minha variável que receberá o  time para ser usada no time picker.
   TimeOfDay time = TimeOfDay(hour: 10, minute: 30);
 
+  //Instanciando  lista string que receberá o tipo de agressão
+  List<String> items = [
+    'Agressão Verbal',
+    'Agressão Física',
+    'Agressão Escrita',
+    'Agressão Material',
+    'Agressão Moral',
+    'Agressão Cyberbullying'
+  ];
+  String? selectedItem = 'Agressão Verbal';
+
   //INSTANCIANDO A VARIÁVEIS QUE SALVARÁ A DATA DO MEU DATE
   var _dataOcorrido;
   var _horarioOcorrido;
@@ -38,7 +49,6 @@ class _EfetuarDenunciaState extends State<EfetuarDenuncia> {
   TextEditingController _controllerIdentiVitima = TextEditingController();
   TextEditingController _controllerIdentiAgressor = TextEditingController();
   TextEditingController _controllerLocalOcorrido = TextEditingController();
-  TextEditingController _controllerTipoAgressao = TextEditingController();
   TextEditingController _controllerDescricao = TextEditingController();
 
   _validarCamposDenuncia() {
@@ -47,7 +57,7 @@ class _EfetuarDenunciaState extends State<EfetuarDenuncia> {
     var identificadorAgressor = _controllerIdentiAgressor.text;
     var localOcorrido = _controllerLocalOcorrido.text;
     var horario = _horarioOcorrido;
-    var tipoAgressao = _controllerTipoAgressao.text;
+    var tipoAgressao = selectedItem.toString();
     var descricao = _controllerDescricao.text;
 
     if (identificadorVitima.isNotEmpty) {
@@ -440,19 +450,30 @@ class _EfetuarDenunciaState extends State<EfetuarDenuncia> {
                             Container(
                               width: 320,
                               height: 70,
-                              child: TextField(
-                                controller: _controllerTipoAgressao,
-                                keyboardType: TextInputType.text,
-                                style: TextStyle(fontSize: 16),
-                                decoration: InputDecoration(
-                                    contentPadding:
-                                        EdgeInsets.fromLTRB(32, 14, 32, 14),
-                                    hintText: "Tipo de Agressão",
-                                    filled: true,
-                                    fillColor: Colors.white,
-                                    border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                        borderSide: BorderSide.none)),
+                              child: SizedBox(
+                                child: DropdownButtonFormField<String>(
+                                  iconEnabledColor: Color(0xff9ecfc0),
+                                  decoration: InputDecoration(
+                                      contentPadding:
+                                          EdgeInsets.fromLTRB(13, 14, 13, 14),
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(30),
+                                        borderSide: BorderSide.none,
+                                      )),
+                                  value: selectedItem,
+                                  items: items
+                                      .map((item) => DropdownMenuItem(
+                                            value: item,
+                                            child: Text(item,
+                                                style: TextStyle(fontSize: 16, color: Color(0xff9ecfc0))),
+                                          ))
+                                      .toList(),
+                                  onChanged: (item) => setState(() {
+                                    selectedItem = item; 
+                                  }),
+                                ),
                               ),
                             ),
                           ],
