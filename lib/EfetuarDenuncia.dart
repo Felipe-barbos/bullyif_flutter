@@ -61,6 +61,7 @@ class _EfetuarDenunciaState extends State<EfetuarDenuncia> {
           int idenuncia = random.nextInt(9999);
           denuncia.idDenuncia = idenuncia.toString();
           denuncia.identificacaoUsuario = _idUsuarioLogado;
+          denuncia.urlImagemUsuario = _urlImage;
           denuncia.identificacaoVitima = identificadorVitima;
           denuncia.identificacaoAgressor = identificadorAgressor;
           denuncia.statusDenuncia = "Não Resolvido";

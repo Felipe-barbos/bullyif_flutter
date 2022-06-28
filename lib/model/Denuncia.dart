@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 class Denuncia {
   var _identificacaoUsuario;
+  var _urlImagemUsuario;
   var _idDenuncia;
   var _identificacaoVitima;
   var _identificacaoAgressor;
@@ -23,6 +24,7 @@ class Denuncia {
       Map<String, dynamic> map = {
         
           "identificacaoUsuario": this.identificacaoUsuario,
+          "urlImagemUsuario": this.urlImagemUsuario,
           "idDenuncia": this.idDenuncia,
           "identificacaoVitima": this.identificacaoVitima,
           "identificacaoAgressor": this.identificacaoAgressor,
@@ -49,6 +51,11 @@ class Denuncia {
 
   set identificacaoUsuario(String value) {
     _identificacaoUsuario = value;
+  }
+  String get urlImagemUsuario => _urlImagemUsuario;
+
+  set urlImagemUsuario(String value) {
+    _urlImagemUsuario = value;
   }
 
   String get idDenuncia => _idDenuncia;

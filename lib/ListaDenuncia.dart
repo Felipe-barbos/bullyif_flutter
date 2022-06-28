@@ -38,6 +38,7 @@ class _ListaDenunciaState extends State<ListaDenuncia> {
       Denuncia denuncia = Denuncia();
       denuncia.idDenuncia = item.id;
       denuncia.identificacaoUsuario = dados["identificacaoUsuario"];
+      denuncia.urlImagemUsuario = dados["urlImagemUsuario"];
       denuncia.identificacaoVitima = dados["identificacaoVitima"];
       denuncia.identificacaoAgressor = dados["identificacaoAgressor"];
       denuncia.localOcorrido = dados["localOcorrido"];
@@ -165,10 +166,12 @@ class _ListaDenunciaState extends State<ListaDenuncia> {
                                           maxRadius: 25,
                                           backgroundColor: Colors.white,
                                           backgroundImage:
-                                              _imagemUsuarioPadrao != null
+                                              denuncia.urlImagemUsuario != null
                                                   ? NetworkImage(
-                                                      _imagemUsuarioPadrao)
-                                                  : null,
+                                                      denuncia.urlImagemUsuario)
+                                                  : NetworkImage(
+                                                    _imagemUsuarioPadrao
+                                                  ),
                                         ),
                                       ),
                                       title: Text(
